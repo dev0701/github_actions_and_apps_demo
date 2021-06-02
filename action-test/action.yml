@@ -1,0 +1,17 @@
+name: "test-action"
+description: "Test the python project to make sure it runs and does not have issues."
+author: "dev0701"
+
+inputs:
+  MY_NAME:
+    description: "Who to greet"
+    required: true
+    default: "World"
+
+runs:
+  using: "docker"
+  image: "Dockerfile"
+
+branding:
+  icon: "mic"
+  color: "purple"
