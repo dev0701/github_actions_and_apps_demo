@@ -42,7 +42,7 @@ if(validation_method == 0):
             # split data for training/testing
             #f = open('store.pckl', 'rb')
             #X_train, y_train, X_test, y_test, X_val, y_val = pickle.load(f)
-            X_train, y_train, X_test, y_test, X_val, y_val = import_data.run("data-set-no-grade.csv", 2,4, 40)
+            X_train, y_train, X_test, y_test, X_val, y_val = import_data.run("src/data-set-no-grade.csv", 2,4, 40)
             #f = open('store.pckl', 'wb')
             #pickle.dump([X_train, y_train, X_test, y_test, X_val, y_val], f)
             #f.close()
@@ -102,7 +102,7 @@ if(validation_method == 0):
 
     # KNN with variable k
     if algorithm == 1:
-        X_train, y_train, X_test, y_test, X_val, y_val = import_data.run("data-set-no-grade.csv", 2,3, 40)
+        X_train, y_train, X_test, y_test, X_val, y_val = import_data.run("src/data-set-no-grade.csv", 2,3, 40)
         print(KNN_new.run(k, X_train, y_train, X_test, y_test, X_val,
             y_val))
 
