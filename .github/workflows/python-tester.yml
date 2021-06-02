@@ -17,4 +17,5 @@ jobs:
         architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
     - run: pip install numpy
     - run: pip install sklearn
-    - run: python src/main.py
+    - run: cd src
+    - run: python main.py
