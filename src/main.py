@@ -20,7 +20,7 @@ neg_district = 2
 # number of nearest neighbors
 k = 1
 #csv path for data
-csv = "src/data-set-no-grade.csv"
+csv = "data-set-no-grade.csv"
 #number of folds in K-fold cross validation
 k_cross_val = 5
 ###################Training/Validating/Testing##########################
