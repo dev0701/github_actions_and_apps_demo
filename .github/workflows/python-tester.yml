@@ -18,7 +18,6 @@ jobs:
         if: github.event.action != 'return'
         run: |
           curl -X POST https://api.github.com/repos/dev0701/hello-github-actions/dispatches \
-          -H 'Accept: application/vnd.github.everest-preview+json' \
           -u ${{ secrets.WORKFLOW_SECRET}} \
           --data '{"event_type": "ping", "client_payload": {"repository": "'"$GITHUB_REPOSITORY"'" }}'
       - name: Acknowledge Hello World Action
@@ -26,7 +25,6 @@ jobs:
         run: |
           echo "Hello World ran from '${{ github.event.client_payload.repository }}'" && \
           curl -X POST https://api.github.com/repos/dev0701/hello-github-actions/dispatches \
-          -H 'Accept: application/vnd.github.everest-preview+json' \
           -u ${{secrets.WORKFLOW_SECRET}} \
           --data '{"event_type": "acknowledge", "client_payload" : { "repository": "'"$GITHUB_REPOSITORY"'" }}'
 
