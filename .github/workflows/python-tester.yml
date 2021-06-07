@@ -1,6 +1,8 @@
 name: "Check Python Then Trigger Hello World"
 
-on: [push]
+on: 
+  push:
+  repository_dispatch:
 
 jobs:
   build:
