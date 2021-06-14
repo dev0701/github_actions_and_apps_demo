@@ -1,35 +1,37 @@
-name: "Check Python Then Trigger Hello World"
-
-on: 
-  push:
-  repository_dispatch:
-
+name: A workflow for my Hello World file
+on: push
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  install-runner:
+    runs-on: ubuntu-20.04
+    name: Install runner
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - name: Authenticate
+        uses: redhat-actions/oc-login@v1
+        env:
+          OPENSHIFT_USER: ${{ secrets.OPENSHIFT_USER }}
+          OPENSHIFT_NAMESPACE: default
         with:
-          python-version: '3.8'
-          architecture: 'x64' 
-      - run: pip install numpy
-      - run: pip install sklearn
-      - run: python src/main.py
-      - name: Call Hello World Action - Dispatch initiating repository event
-        if: github.event.action != 'return'
-        run: |
-          curl -X POST https://api.github.com/repos/dev0701/hello-github-actions/dispatches \
-          -H "Accept: application/vnd.github.v3+json" \
-          -u ${{ secrets.WORKFLOW_SECRET}} \
-          --data '{"event_type": "ping", "client_payload": {"repository": "'"$GITHUB_REPOSITORY"'" }}'
-      - name: Acknowledge Hello World Action
-        if: github.event.action == 'return'
-        run: |
-          echo "Hello World ran from '${{ github.event.client_payload.repository }}'" && \
-          curl -X POST https://api.github.com/repos/dev0701/hello-github-actions/dispatches \
-          -H "Accept: application/vnd.github.v3+json" \
-          -u ${{secrets.WORKFLOW_SECRET}} \
-          --data '{"event_type": "acknowledge", "client_payload" : { "repository": "'"$GITHUB_REPOSITORY"'" }}'
+          openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
+          openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
+          insecure_skip_tls_verify: true
+          namespace: default
+      - name: Install self hosted runner into this repository
+        uses: redhat-actions/openshift-actions-runner-installer@v1
+        with:
+          github_pat: ${{ secrets.PAT }}
+      - name: Install CLI tools from OpenShift Mirror
+        uses: redhat-actions/openshift-tools-installer@v1
+        with:
+          source: "mirror"
+          oc: "3"
+          helm: "latest"
 
-    
+  self-hosted-workflow :
+    name: Running on OpenShift runner
+    runs-on: [self-hosted]
+    steps:      
+      - uses: actions/checkout@v2
+      - name: Scan valid yaml with kube-linter
+        uses: stackrox/kube-linter-action@v1.0.2
+        with:
+          directory: sample/valid-yaml
